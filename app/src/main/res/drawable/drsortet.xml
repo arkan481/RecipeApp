@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/ic_sort_black_24dp"
+        android:height="35dp"
+        android:width="35dp"
+        android:gravity="end|center_vertical"
+        android:right="3dp"
+        >
+        <shape>
+            <padding
+                android:left="22dp"
+                android:right="90dp"
+                />
+        </shape>
+    </item>
+
+</layer-list>
