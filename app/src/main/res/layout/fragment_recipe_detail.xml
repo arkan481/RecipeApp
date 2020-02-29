@@ -20,170 +20,200 @@
         android:backgroundTint="@android:color/holo_orange_light"
         app:borderWidth="0dp"
         />
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:elevation="18dp"
+            android:id="@+id/toolbardetailid"
+            app:popupTheme="@style/Theme.AppCompat"
+            android:gravity="center"
+            app:titleTextColor="@android:color/white"
+            android:background="@android:color/holo_orange_dark"
+            android:textAlignment="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-            <EditText
-                android:id="@+id/foodtitleetid"
-                android:inputType="text"
-                android:singleLine="true"
-                android:layout_marginTop="10dp"
-                android:textColor="@android:color/black"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter The Food Title..."
-                />
-            <ImageView
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/saladimage"
-                />
+            android:layout_height="?attr/actionBarSize">
             <TextView
-                android:textSize="25sp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:id="@+id/appbartitledetailid"
                 android:textStyle="bold"
-                android:text="Ingridients"
-                />
-            <TextView
-                android:layout_marginLeft="5dp"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text="For 4 Servings"
-                android:textSize="18sp"
+                android:text="Recipe App"
                 />
+        </androidx.appcompat.widget.Toolbar>
+        <ScrollView
+            android:layout_below="@id/toolbardetailid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <LinearLayout
-                android:background="@android:color/transparent"
-                android:id="@+id/ingridientslayoutid"
-                android:clipToPadding="false"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
-                <androidx.cardview.widget.CardView
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/addingridientsbuttonid"
-                    app:cardCornerRadius="5dp"
-                    android:clipToPadding="false"
-                    app:cardElevation="18dp"
+                <EditText
+                    android:id="@+id/foodtitleetid"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    app:cardBackgroundColor="@android:color/holo_blue_dark"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter The Food Title..."
+                    />
+                <ImageView
+                    android:id="@+id/recipeimageviewid"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_add_a_photo_black_24dp"
+                    />
+                <TextView
+                    android:textSize="25sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text="Ingridients"
+                    />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text="For 4 Servings"
+                    android:textSize="18sp"
+                    />
+                <LinearLayout
+                    android:background="@android:color/transparent"
+                    android:id="@+id/ingridientslayoutid"
+                    android:clipToPadding="false"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     >
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/addingridientsbuttonid"
+                        app:cardCornerRadius="5dp"
+                        android:clipToPadding="false"
+                        app:cardElevation="18dp"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="50dp"
+                        app:cardBackgroundColor="@android:color/holo_blue_dark"
                         >
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/addiconid"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:layout_width="25dp"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/addicon"
-                            android:layout_marginLeft="8dp"
-                            />
-                        <TextView
-                            android:textSize="15sp"
-                            android:gravity="center_vertical"
-                            android:layout_centerVertical="true"
-                            android:textColor="@android:color/white"
-                            android:paddingLeft="30dp"
-                            android:layout_toRightOf="@id/addiconid"
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Add Ingridients"
-                            />
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
+                            >
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/addiconid"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/addicon"
+                                android:layout_marginLeft="8dp"
+                                />
+                            <TextView
+                                android:textSize="15sp"
+                                android:gravity="center_vertical"
+                                android:layout_centerVertical="true"
+                                android:textColor="@android:color/white"
+                                android:paddingLeft="30dp"
+                                android:layout_toRightOf="@id/addiconid"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Add Ingridients"
+                                />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    />
+                <TextView
+                    android:textSize="25sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text="Preparations"
+                    />
+                <LinearLayout
+                    android:id="@+id/preparationslayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/addpreparationsbuttonid"
+                        app:cardCornerRadius="5dp"
+                        android:clipToPadding="false"
+                        android:layout_marginTop="5dp"
+                        app:cardElevation="18dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        app:cardBackgroundColor="@android:color/holo_red_light"
+                        >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            >
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/addiconingridientsid"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/addicon"
+                                android:layout_marginLeft="8dp"
+                                />
+                            <TextView
+                                android:textSize="15sp"
+                                android:gravity="center_vertical"
+                                android:layout_centerVertical="true"
+                                android:textColor="@android:color/white"
+                                android:paddingLeft="30dp"
+                                android:layout_toRightOf="@id/addiconingridientsid"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Add Preparations"
+                                />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                />
-            <TextView
-                android:textSize="25sp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:text="Preparations"
-                />
-            <LinearLayout
-                android:id="@+id/preparationslayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="10dp"
-                >
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/addpreparationsbuttonid"
-                    app:cardCornerRadius="5dp"
-                    android:clipToPadding="false"
-                    android:layout_marginTop="5dp"
-                    app:cardElevation="18dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    app:cardBackgroundColor="@android:color/holo_red_light"
-                    >
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        >
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/addiconingridientsid"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:layout_width="25dp"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/addicon"
-                            android:layout_marginLeft="8dp"
-                            />
-                        <TextView
-                            android:textSize="15sp"
-                            android:gravity="center_vertical"
-                            android:layout_centerVertical="true"
-                            android:textColor="@android:color/white"
-                            android:paddingLeft="30dp"
-                            android:layout_toRightOf="@id/addiconingridientsid"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Add Preparations"
-                            />
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
-
-        </LinearLayout>
+        </ScrollView>
 
 
-    </ScrollView>
+    </RelativeLayout>
 
 
 </FrameLayout>

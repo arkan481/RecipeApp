@@ -24,32 +24,59 @@
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
-            android:clipToPadding="false"
-            android:background="@drawable/boxsearchbackground"
-            android:id="@+id/searchlayout"
+        <androidx.appcompat.widget.Toolbar
             android:elevation="18dp"
+            android:id="@+id/toolbarlistid"
+            app:popupTheme="@style/Theme.AppCompat"
+            android:gravity="center"
+            app:titleTextColor="@android:color/white"
+            android:background="@android:color/holo_orange_dark"
+            android:textAlignment="center"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
-            <ImageView
-                android:id="@+id/searchiconid"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize">
+            <TextView
+                android:gravity="center"
+                android:id="@+id/appbartitleid"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_black_24dp"/>
-            <EditText
-                android:layout_marginLeft="5dp"
-                android:inputType="text"
-                android:maxLines="1"
-                android:id="@+id/searchrecipeetid"
-                android:layout_centerVertical="true"
-                android:background="@drawable/etsearchrecipebackground"
-                android:layout_toRightOf="@id/searchiconid"
-                android:layout_width="225dp"
-                android:layout_height="60dp"
-                android:hint="Search Recipes"
+                android:text="Recipe App"
                 />
+        </androidx.appcompat.widget.Toolbar>
+        <RelativeLayout
+            android:layout_below="@id/toolbarlistid"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:clipToPadding="false"
+                android:background="@drawable/boxsearchbackground"
+                android:id="@+id/searchlayout"
+                android:elevation="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+                <ImageView
+                    android:id="@+id/searchiconid"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search_black_24dp"/>
+                <EditText
+                    android:layout_marginLeft="5dp"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:id="@+id/searchrecipeetid"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/etsearchrecipebackground"
+                    android:layout_toRightOf="@id/searchiconid"
+                    android:layout_width="225dp"
+                    android:layout_height="60dp"
+                    android:hint="Search Recipes"
+                    />
 
                 <Spinner
                     android:dropDownWidth="120dp"
@@ -60,30 +87,22 @@
                     android:layout_width="120dp"
                     android:layout_height="50dp"
                     />
+            </RelativeLayout>
+            <GridView
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:layout_marginTop="5dp"
+                android:columnWidth="205dp"
+                android:id="@+id/recipegrid"
+                android:horizontalSpacing="10dp"
+                android:verticalSpacing="10dp"
+                android:numColumns="2"
+                android:layout_below="@id/searchlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
         </RelativeLayout>
-        <GridView
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp"
-            android:layout_marginTop="5dp"
-            android:columnWidth="205dp"
-            android:id="@+id/recipegrid"
-            android:horizontalSpacing="10dp"
-            android:verticalSpacing="10dp"
-            android:numColumns="2"
-            android:layout_below="@id/searchlayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
 
     </RelativeLayout>
-
-
-
-
-
-
-
-
-
 
 </FrameLayout>

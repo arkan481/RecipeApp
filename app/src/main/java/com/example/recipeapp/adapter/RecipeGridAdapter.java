@@ -67,8 +67,10 @@ public class RecipeGridAdapter extends BaseAdapter {
                 myBundle.putString("lastedited",recipeModel.getLastedited());
                 myBundle.putSerializable("ingridients",recipeModel.getIngridients());
                 myBundle.putSerializable("preparations",recipeModel.getSteps());
+                myBundle.putByteArray("recipeimage",recipeModel.getimage());
                 myBundle.putSerializable("Recipemodels",recipeModels);
                 myBundle.putSerializable("updatingmodel",recipeModel);
+                myBundle.putString("appbartitle",recipeModel.getTitle());
                 myBundle.putBoolean("isupdating",true);
                 AppCompatActivity myactivity =(AppCompatActivity) view.getContext();
                 Fragment myFragment = new RecipeDetailFragment();
@@ -84,7 +86,8 @@ public class RecipeGridAdapter extends BaseAdapter {
                 notifyDataSetChanged();
             }
         });
-        recipeimage.setImageResource(recipeModel.getimage());
+//        recipeimage.setImageResource(recipeModel.getimage());
+        // TODO : Set image resource to recipe item list using new method
         recipetitle.setText(recipeModel.getTitle());
         lasteditedrecipe.setText(recipeModel.getLastedited());
         return itemview;

@@ -1,9 +1,20 @@
 package com.example.recipeapp.ui;
 
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,11 +24,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recipeapp.R;
 import com.example.recipeapp.model.RecipeModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -31,18 +45,21 @@ public class RecipeDetailFragment extends Fragment {
     FloatingActionButton fabdetail;
     ArrayList<RecipeModel> recipeModels;
     RecipeModel updatingmodel;
-
+    TextView appbartitle;
     CardView addingridientscv,addpreparationscv;
     LinearLayout ingridientslayout,preparationslayout;
     EditText etingridients,etpreparations,foodtitleet;
     View ingridientscard,preparationscard;
-    ImageView removeiconingridients,removeiconpreparations;
+    ImageView removeiconingridients,removeiconpreparations,RecipeImageView;
     ArrayList<EditText> EditTextIngridients = new ArrayList<>();
     ArrayList<EditText> EditTextPreparations = new ArrayList<>();
     Bundle extras;
     ArrayList<String> ingridients = new ArrayList<String>();
     ArrayList<String> preparations = new ArrayList<String>();
+    byte[] tempimage;
     boolean isupdating=false;
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_PICK_CODE = 1001;
 
 
     public RecipeDetailFragment() {
@@ -59,7 +76,10 @@ public class RecipeDetailFragment extends Fragment {
         isupdating = extras.getBoolean("isupdating");
         recipeModels = (ArrayList<RecipeModel>) extras.getSerializable("Recipemodels");
         System.out.println(recipeModels);
+        appbartitle=v.findViewById(R.id.appbartitledetailid);
+        appbartitle.setText(extras.getString("appbartitle"));
         foodtitleet = v.findViewById(R.id.foodtitleetid);
+        RecipeImageView = v.findViewById(R.id.recipeimageviewid);
         addingridientscv=v.findViewById(R.id.addingridientsbuttonid);
         addpreparationscv =v.findViewById(R.id.addpreparationsbuttonid);
         fabdetail = v.findViewById(R.id.fabdetailid);
@@ -107,6 +127,9 @@ public class RecipeDetailFragment extends Fragment {
         if (isupdating==true) {
             System.out.println("updating...");
             foodtitleet.setText(extras.getString("foodtitle"));
+            tempimage=extras.getByteArray("recipeimage");
+            System.out.println("the byte arr is "+tempimage);
+            RecipeImageView.setImageDrawable(getdrawablefrombytearr(tempimage));
             ingridients = (ArrayList<String>) extras.getSerializable("ingridients");
             preparations = (ArrayList<String>) extras.getSerializable("preparations");
             updatingmodel = (RecipeModel) extras.getSerializable("updatingmodel");
@@ -123,20 +146,72 @@ public class RecipeDetailFragment extends Fragment {
                 if (isupdating==true) {
                     ingridients = new ArrayList<String>();
                     preparations = new ArrayList<String>();
-                    updatingmodel.setimage(R.drawable.saladimage);
+                    updatingmodel.setimage(convertimagetobytearray(RecipeImageView.getDrawable()));
                     updatingmodel.setTitle(foodtitleet.getText().toString());
                     updatingmodel.setIngridients(getingridientlist());
                     updatingmodel.setSteps(getPreparationslist());
                     updatingmodel.setLastedited("Just now");
                 }else {
-                    recipeModels.add(new RecipeModel(foodtitleet.getText().toString(),"02/20/2020",R.drawable.saladimage,getingridientlist(),getPreparationslist()));
+                    recipeModels.add(new RecipeModel(foodtitleet.getText().toString(),"02/20/2020",convertimagetobytearray(RecipeImageView.getDrawable()),getingridientlist(),getPreparationslist()));
+
                 }
                 getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+        RecipeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED) {
+                        //permission denied
+                        String[] permissions={Manifest.permission.READ_EXTERNAL_STORAGE};
+                        //show popup
+                        requestPermissions(permissions,PERMISSION_PICK_CODE);
+                    }else {
+                        //permission granted
+                        pickImageFromGallery();
+
+                    }
+                }else {
+                    // lower than marshmallow
+                    pickImageFromGallery();
+                }
             }
         });
         return v;
 
     }
+
+    private void pickImageFromGallery() {
+        //intent to gallery
+        Intent intenttogallery = new Intent(Intent.ACTION_PICK);
+        intenttogallery.setType("image/*");
+        startActivityForResult(intenttogallery,IMAGE_PICK_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode==getActivity().RESULT_OK&&requestCode==IMAGE_PICK_CODE){
+            RecipeImageView.setImageURI(data.getData());
+
+        }else {
+            Toast.makeText(getContext(),"Error setting the image",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_PICK_CODE:{
+                if (grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED) {
+                    pickImageFromGallery();
+                }else {
+                    Toast.makeText(getContext(),"Storage permission denied",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
     private void populateingridientscard(ViewGroup container) {
         for (int i =0; i<ingridients.size();i++) {
             ingridientscard = LayoutInflater.from(getContext()).inflate(R.layout.ingridientscarditem,container,false);
@@ -186,5 +261,18 @@ public class RecipeDetailFragment extends Fragment {
         }
         return preparations;
     }
+    byte[] convertimagetobytearray(Drawable drawable) {
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+        byte[] bytearr = byteArrayOutputStream.toByteArray();
+        return bytearr;
+    }
+    Drawable getdrawablefrombytearr(byte[] bytearr) {
+        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(bytearr,0,bytearr.length));
+        return image;
+    }
+
 
 }

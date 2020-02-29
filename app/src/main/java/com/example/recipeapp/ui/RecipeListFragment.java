@@ -31,7 +31,6 @@ import java.util.zip.Inflater;
 public class RecipeListFragment extends Fragment {
 
     Spinner SortSpinner;
-    TextView appbartitle;
     RelativeLayout searchlayout;
     GridView recipegrid;
     ArrayList<RecipeModel> recipeModels;
@@ -72,6 +71,7 @@ public class RecipeListFragment extends Fragment {
         fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                recipeModelsBundle.putString("appbartitle","Add Recipe");
                 recipeModelsBundle.putBoolean("isupdating",false);
                 recipeModelsBundle.putSerializable("Recipemodels",(Serializable) recipeModels);
                 Fragment fragment = new RecipeDetailFragment();
