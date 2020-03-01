@@ -52,10 +52,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RelativeLayout
+                android:outlineSpotShadowColor="@android:color/black"
+                android:outlineAmbientShadowColor="@android:color/black"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
                 android:clipToPadding="false"
                 android:background="@drawable/boxsearchbackground"
                 android:id="@+id/searchlayout"
-                android:elevation="18dp"
+               android:elevation="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="60dp">
                 <ImageView

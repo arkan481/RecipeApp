@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -32,6 +33,7 @@ import com.example.recipeapp.model.RecipeModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayOutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -56,10 +58,11 @@ public class RecipeDetailFragment extends Fragment {
     Bundle extras;
     ArrayList<String> ingridients = new ArrayList<String>();
     ArrayList<String> preparations = new ArrayList<String>();
-    byte[] tempimage;
+//    byte[] tempimage;
     boolean isupdating=false;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_PICK_CODE = 1001;
+    String RecipeImage;
 
 
     public RecipeDetailFragment() {
@@ -127,9 +130,9 @@ public class RecipeDetailFragment extends Fragment {
         if (isupdating==true) {
             System.out.println("updating...");
             foodtitleet.setText(extras.getString("foodtitle"));
-            tempimage=extras.getByteArray("recipeimage");
-            System.out.println("the byte arr is "+tempimage);
-            RecipeImageView.setImageDrawable(getdrawablefrombytearr(tempimage));
+            RecipeImage=extras.getString("recipeimage");
+//            System.out.println("the byte arr is "+tempimage);
+            RecipeImageView.setImageURI(Uri.parse(RecipeImage));
             ingridients = (ArrayList<String>) extras.getSerializable("ingridients");
             preparations = (ArrayList<String>) extras.getSerializable("preparations");
             updatingmodel = (RecipeModel) extras.getSerializable("updatingmodel");
@@ -146,14 +149,14 @@ public class RecipeDetailFragment extends Fragment {
                 if (isupdating==true) {
                     ingridients = new ArrayList<String>();
                     preparations = new ArrayList<String>();
-                    updatingmodel.setimage(convertimagetobytearray(RecipeImageView.getDrawable()));
+//                    updatingmodel.setimage(convertimagetobytearray(RecipeImageView.getDrawable()));
+                    updatingmodel.setimage(RecipeImage);
                     updatingmodel.setTitle(foodtitleet.getText().toString());
                     updatingmodel.setIngridients(getingridientlist());
                     updatingmodel.setSteps(getPreparationslist());
                     updatingmodel.setLastedited("Just now");
                 }else {
-                    recipeModels.add(new RecipeModel(foodtitleet.getText().toString(),"02/20/2020",convertimagetobytearray(RecipeImageView.getDrawable()),getingridientlist(),getPreparationslist()));
-
+                    recipeModels.add(new RecipeModel(foodtitleet.getText().toString(),"02/20/2020",RecipeImage,getingridientlist(),getPreparationslist()));
                 }
                 getActivity().getSupportFragmentManager().popBackStack();
             }
@@ -193,6 +196,7 @@ public class RecipeDetailFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode==getActivity().RESULT_OK&&requestCode==IMAGE_PICK_CODE){
             RecipeImageView.setImageURI(data.getData());
+            RecipeImage =data.getData().toString();
 
         }else {
             Toast.makeText(getContext(),"Error setting the image",Toast.LENGTH_SHORT).show();
@@ -261,18 +265,18 @@ public class RecipeDetailFragment extends Fragment {
         }
         return preparations;
     }
-    byte[] convertimagetobytearray(Drawable drawable) {
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-        byte[] bytearr = byteArrayOutputStream.toByteArray();
-        return bytearr;
-    }
-    Drawable getdrawablefrombytearr(byte[] bytearr) {
-        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(bytearr,0,bytearr.length));
-        return image;
-    }
+//    byte[] convertimagetobytearray(Drawable drawable) {
+//        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+//        Bitmap bitmap = bitmapDrawable.getBitmap();
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+//        byte[] bytearr = byteArrayOutputStream.toByteArray();
+//        return bytearr;
+//    }
+//    Drawable getdrawablefrombytearr(byte[] bytearr) {
+//        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(bytearr,0,bytearr.length));
+//        return image;
+//    }
 
 
 }

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class RecipeModel implements Serializable {
     private String title,lastedited;
-    private byte[] image;
+    private String image;
     private ArrayList<String> ingridients,steps;
-    public RecipeModel(String title, String lastedited, byte[] image, ArrayList<String> ingridientlist, ArrayList<String> preparationslist) {
+    public RecipeModel(String title, String lastedited, String image, ArrayList<String> ingridientlist, ArrayList<String> preparationslist) {
         this.title=title;
         this.lastedited=lastedited;
         this.image=image;
@@ -26,7 +26,7 @@ public class RecipeModel implements Serializable {
     public String getTitle() {
         return this.title;
     }
-    public byte[] getimage() {
+    public String getimage() {
         return this.image;
     }
     public String getLastedited() {
@@ -38,7 +38,7 @@ public class RecipeModel implements Serializable {
     public void setLastedited(String lastedited) {
         this.lastedited=lastedited;
     }
-    public void setimage(byte[] image) {
+    public void setimage(String image) {
         this.image=image;
     }
     public void setIngridients(ArrayList<String>ingridients) {

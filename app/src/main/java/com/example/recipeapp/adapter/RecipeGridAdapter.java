@@ -1,6 +1,7 @@
 package com.example.recipeapp.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +68,7 @@ public class RecipeGridAdapter extends BaseAdapter {
                 myBundle.putString("lastedited",recipeModel.getLastedited());
                 myBundle.putSerializable("ingridients",recipeModel.getIngridients());
                 myBundle.putSerializable("preparations",recipeModel.getSteps());
-                myBundle.putByteArray("recipeimage",recipeModel.getimage());
+                myBundle.putString("recipeimage",recipeModel.getimage());
                 myBundle.putSerializable("Recipemodels",recipeModels);
                 myBundle.putSerializable("updatingmodel",recipeModel);
                 myBundle.putString("appbartitle",recipeModel.getTitle());
@@ -88,6 +89,7 @@ public class RecipeGridAdapter extends BaseAdapter {
         });
 //        recipeimage.setImageResource(recipeModel.getimage());
         // TODO : Set image resource to recipe item list using new method
+        recipeimage.setImageURI(Uri.parse(recipeModel.getimage()));
         recipetitle.setText(recipeModel.getTitle());
         lasteditedrecipe.setText(recipeModel.getLastedited());
         return itemview;
