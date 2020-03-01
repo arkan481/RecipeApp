@@ -146,19 +146,24 @@ public class RecipeDetailFragment extends Fragment {
         fabdetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isupdating==true) {
-                    ingridients = new ArrayList<String>();
-                    preparations = new ArrayList<String>();
-//                    updatingmodel.setimage(convertimagetobytearray(RecipeImageView.getDrawable()));
-                    updatingmodel.setimage(RecipeImage);
-                    updatingmodel.setTitle(foodtitleet.getText().toString());
-                    updatingmodel.setIngridients(getingridientlist());
-                    updatingmodel.setSteps(getPreparationslist());
-                    updatingmodel.setLastedited("Just now");
+                if (foodtitleet.getText().toString().equals("")||RecipeImage==null) {
+                    Toast.makeText(getContext(),"Please Specify the food title and the food image",Toast.LENGTH_LONG).show();
                 }else {
-                    recipeModels.add(new RecipeModel(foodtitleet.getText().toString(),"02/20/2020",RecipeImage,getingridientlist(),getPreparationslist()));
+                    if (isupdating==true) {
+                        ingridients = new ArrayList<String>();
+                        preparations = new ArrayList<String>();
+//                    updatingmodel.setimage(convertimagetobytearray(RecipeImageView.getDrawable()));
+                        updatingmodel.setimage(RecipeImage);
+                        updatingmodel.setTitle(foodtitleet.getText().toString());
+                        updatingmodel.setIngridients(getingridientlist());
+                        updatingmodel.setSteps(getPreparationslist());
+                        updatingmodel.setLastedited("Just now");
+                    }else {
+                        recipeModels.add(new RecipeModel(foodtitleet.getText().toString(),"02/20/2020",RecipeImage,getingridientlist(),getPreparationslist()));
+                    }
+                    getActivity().getSupportFragmentManager().popBackStack();
                 }
-                getActivity().getSupportFragmentManager().popBackStack();
+
             }
         });
         RecipeImageView.setOnClickListener(new View.OnClickListener() {

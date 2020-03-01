@@ -88,7 +88,6 @@ public class RecipeGridAdapter extends BaseAdapter {
             }
         });
 //        recipeimage.setImageResource(recipeModel.getimage());
-        // TODO : Set image resource to recipe item list using new method
         recipeimage.setImageURI(Uri.parse(recipeModel.getimage()));
         recipetitle.setText(recipeModel.getTitle());
         lasteditedrecipe.setText(recipeModel.getLastedited());
