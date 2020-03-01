@@ -8,8 +8,11 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.example.recipeapp.ui.RecipeListFragment;
+import com.example.recipeapp.utils.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
+
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,5 +22,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = myfragment.beginTransaction();
         fragmentTransaction.add(R.id.framehome, new RecipeListFragment());
         fragmentTransaction.commit();
+        databaseHelper = new DatabaseHelper(this);
     }
 }
