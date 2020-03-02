@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import com.example.recipeapp.R;
 import com.example.recipeapp.model.RecipeModel;
 import com.example.recipeapp.ui.RecipeDetailFragment;
+import com.example.recipeapp.ui.RecipeListFragment;
+import com.example.recipeapp.utils.DatabaseHelper;
 
 import org.w3c.dom.Text;
 
@@ -28,10 +30,13 @@ import java.util.zip.Inflater;
 public class RecipeGridAdapter extends BaseAdapter {
     ArrayList<RecipeModel> recipeModels;
     Context mycontext;
-
-    public RecipeGridAdapter(Context context,ArrayList<RecipeModel> recipeModels) {
+    DatabaseHelper databaseHelper;
+    RecipeListFragment recipeListFragment;
+    public RecipeGridAdapter(Context context, ArrayList<RecipeModel> recipeModels, DatabaseHelper databaseHelper, RecipeListFragment recipeListFragment) {
+        this.databaseHelper=databaseHelper;
         mycontext=context;
         this.recipeModels=recipeModels;
+        this.recipeListFragment=recipeListFragment;
     }
 
     public int getCount() {
@@ -74,7 +79,7 @@ public class RecipeGridAdapter extends BaseAdapter {
                 myBundle.putString("appbartitle",recipeModel.getTitle());
                 myBundle.putBoolean("isupdating",true);
                 AppCompatActivity myactivity =(AppCompatActivity) view.getContext();
-                Fragment myFragment = new RecipeDetailFragment();
+                Fragment myFragment = new RecipeDetailFragment(databaseHelper);
                 myFragment.setArguments(myBundle);
                 myactivity.getSupportFragmentManager().beginTransaction().replace(R.id.framehome,myFragment).addToBackStack(null).commit();
 
@@ -83,11 +88,10 @@ public class RecipeGridAdapter extends BaseAdapter {
         trashbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recipeModels.remove(i);
-                notifyDataSetChanged();
+                databaseHelper.deleteRecipe(String.valueOf(recipeModel.getId()));
+                recipeListFragment.refreshgridview();
             }
         });
-//        recipeimage.setImageResource(recipeModel.getimage());
         recipeimage.setImageURI(Uri.parse(recipeModel.getimage()));
         recipetitle.setText(recipeModel.getTitle());
         lasteditedrecipe.setText(recipeModel.getLastedited());

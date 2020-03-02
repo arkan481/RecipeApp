@@ -14,8 +14,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.recipeapp.R;
 import com.example.recipeapp.model.RecipeModel;
+import com.example.recipeapp.utils.DatabaseHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayOutputStream;
@@ -63,10 +66,12 @@ public class RecipeDetailFragment extends Fragment {
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_PICK_CODE = 1001;
     String RecipeImage;
+    DatabaseHelper databaseHelper;
 
 
-    public RecipeDetailFragment() {
+    public RecipeDetailFragment(DatabaseHelper databaseHelper) {
         // Required empty public constructor
+        this.databaseHelper=databaseHelper;
     }
 
 
@@ -131,7 +136,6 @@ public class RecipeDetailFragment extends Fragment {
             System.out.println("updating...");
             foodtitleet.setText(extras.getString("foodtitle"));
             RecipeImage=extras.getString("recipeimage");
-//            System.out.println("the byte arr is "+tempimage);
             RecipeImageView.setImageURI(Uri.parse(RecipeImage));
             ingridients = (ArrayList<String>) extras.getSerializable("ingridients");
             preparations = (ArrayList<String>) extras.getSerializable("preparations");
@@ -150,16 +154,19 @@ public class RecipeDetailFragment extends Fragment {
                     Toast.makeText(getContext(),"Please Specify the food title and the food image",Toast.LENGTH_LONG).show();
                 }else {
                     if (isupdating==true) {
-                        ingridients = new ArrayList<String>();
-                        preparations = new ArrayList<String>();
-//                    updatingmodel.setimage(convertimagetobytearray(RecipeImageView.getDrawable()));
-                        updatingmodel.setimage(RecipeImage);
-                        updatingmodel.setTitle(foodtitleet.getText().toString());
-                        updatingmodel.setIngridients(getingridientlist());
-                        updatingmodel.setSteps(getPreparationslist());
-                        updatingmodel.setLastedited("Just now");
+//                        ingridients = new ArrayList<String>();
+//                        preparations = new ArrayList<String>();
+////                    updatingmodel.setimage(convertimagetobytearray(RecipeImageView.getDrawable()));
+//                        updatingmodel.setimage(RecipeImage);
+//                        updatingmodel.setTitle(foodtitleet.getText().toString());
+//                        updatingmodel.setIngridients(getingridientlist());
+//                        updatingmodel.setSteps(getPreparationslist());
+//                        updatingmodel.setLastedited("Just now");
+                        //TODO : ADD update from database helper
                     }else {
-                        recipeModels.add(new RecipeModel(foodtitleet.getText().toString(),"02/20/2020",RecipeImage,getingridientlist(),getPreparationslist()));
+                        databaseHelper.insertRecipe(foodtitleet.getText().toString(),"02/20/2020",RecipeImage,"4");
+                        insertingridienttodb();
+                        insertpreparationtodb();
                     }
                     getActivity().getSupportFragmentManager().popBackStack();
                 }
@@ -192,16 +199,20 @@ public class RecipeDetailFragment extends Fragment {
 
     private void pickImageFromGallery() {
         //intent to gallery
-        Intent intenttogallery = new Intent(Intent.ACTION_PICK);
+        Intent intenttogallery = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intenttogallery.setType("image/*");
         startActivityForResult(intenttogallery,IMAGE_PICK_CODE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode==getActivity().RESULT_OK&&requestCode==IMAGE_PICK_CODE){
+            Uri test = data.getData();
+            getContext().getContentResolver().takePersistableUriPermission(test,Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             RecipeImageView.setImageURI(data.getData());
-            RecipeImage =data.getData().toString();
+            // TODO : URI IS FIXED BY USING ACTION_OPEN_DOCUMENT BUT THERE MIGHT BE A BETTER WAY SEE BOOKMARK.
+            RecipeImage =test.toString();
 
         }else {
             Toast.makeText(getContext(),"Error setting the image",Toast.LENGTH_SHORT).show();
@@ -257,12 +268,17 @@ public class RecipeDetailFragment extends Fragment {
             preparationslayout.addView(preparationscard,i);
         }
     }
-    ArrayList<String> getingridientlist() {
+    public void insertingridienttodb() {
         for (int i =0;i<EditTextIngridients.size();i++) {
             System.out.println("the total i is "+i);
-            ingridients.add(EditTextIngridients.get(i).getText().toString());
+            databaseHelper.insertingridients(databaseHelper.fetchlatestRecipeID(),EditTextIngridients.get(i).getText().toString());
         }
-        return  ingridients;
+    }
+    public void insertpreparationtodb() {
+        for (int i =0;i<EditTextPreparations.size();i++) {
+            System.out.println("the total i is "+i);
+            databaseHelper.insertPreparations(databaseHelper.fetchlatestRecipeID(),EditTextPreparations.get(i).getText().toString());
+        }
     }
     ArrayList<String> getPreparationslist() {
         for (int i =0;i<EditTextPreparations.size();i++) {
@@ -270,18 +286,6 @@ public class RecipeDetailFragment extends Fragment {
         }
         return preparations;
     }
-//    byte[] convertimagetobytearray(Drawable drawable) {
-//        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-//        Bitmap bitmap = bitmapDrawable.getBitmap();
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-//        byte[] bytearr = byteArrayOutputStream.toByteArray();
-//        return bytearr;
-//    }
-//    Drawable getdrawablefrombytearr(byte[] bytearr) {
-//        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(bytearr,0,bytearr.length));
-//        return image;
-//    }
 
 
 }

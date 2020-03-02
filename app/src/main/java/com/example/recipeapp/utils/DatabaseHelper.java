@@ -1,8 +1,10 @@
 package com.example.recipeapp.utils;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQuery;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -51,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "PreparationsName VARCHAR," +
                 "FOREIGN KEY (RecipeID) REFERENCES "+db_Table_Recipe+("RecipeID") +
                 ")");
+        //TODO : ADD CONSTRAINT TO DELETE ON UPDATE FOR THE FOREIGN KEY
     }
 
     @Override
@@ -59,5 +62,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+db_Table_Ingridients);
         db.execSQL("DROP TABLE IF EXISTS "+db_Table_Preparations);
         onCreate(db);
+    }
+    public Cursor fetchAllRecipedata() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("Select * from "+db_Table_Recipe,null);
+        return res;
+    }
+    public Cursor fetchAllIngridients(String RecipeID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("Select * from "+db_Table_Ingridients+" where RecipeID = (?)",new String[]{RecipeID});
+        return res;
+    }
+    public Cursor fetchAllPreparations(String RecipeID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM "+db_Table_Preparations+" WHERE RecipeID = (?)",new String[]{RecipeID});
+        return res;
+    }
+    public void insertRecipe (String RecipeName,String RecipeLastEdited,String RecipeImage,String RecipeServingSize) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("INSERT INTO "+db_Table_Recipe+" (RecipeName,RecipeLastEdited,RecipeImage,RecipeServingSize) VALUES (?,?,?,?)",new String[]{RecipeName,RecipeLastEdited,RecipeImage,RecipeServingSize});
+    }
+    public void deleteRecipe(String RecipeID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM "+db_Table_Recipe+" WHERE RecipeID = (?)",new String[]{RecipeID});
+    }
+    public void insertingridients(String RecipeID,String IngridientsName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("INSERT INTO "+ db_Table_Ingridients+" (RecipeID,IngridientsName) VALUES (?,?)",new String[] {RecipeID,IngridientsName});
+    }
+    public void insertPreparations(String RecipeID,String PreparationsName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("INSERT INTO "+ db_Table_Preparations+" (RecipeID,PreparationsName) VALUES (?,?)",new String[] {RecipeID,PreparationsName});
+    }
+    public String fetchlatestRecipeID() {
+        String id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT MAX(RecipeID) FROM "+ db_Table_Recipe,null);
+        res.moveToNext();
+        id=res.getString(0);
+        return id;
     }
 }

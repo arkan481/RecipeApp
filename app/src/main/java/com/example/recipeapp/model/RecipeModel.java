@@ -6,10 +6,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class RecipeModel implements Serializable {
+    private int id;
+
+
+
     private String title,lastedited;
     private String image;
     private ArrayList<String> ingridients,steps;
-    public RecipeModel(String title, String lastedited, String image, ArrayList<String> ingridientlist, ArrayList<String> preparationslist) {
+    public RecipeModel(int id,String title, String lastedited, String image, ArrayList<String> ingridientlist, ArrayList<String> preparationslist) {
+        this.id=id;
         this.title=title;
         this.lastedited=lastedited;
         this.image=image;
@@ -17,6 +22,12 @@ public class RecipeModel implements Serializable {
         this.steps=preparationslist;
     }
 
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     public ArrayList<String> getIngridients() {
         return this.ingridients;
     }

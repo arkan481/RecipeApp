@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.recipeapp.ui.RecipeListFragment;
@@ -18,10 +19,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        databaseHelper = new DatabaseHelper(this);
         FragmentManager myfragment = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = myfragment.beginTransaction();
-        fragmentTransaction.add(R.id.framehome, new RecipeListFragment());
+        fragmentTransaction.add(R.id.framehome, new RecipeListFragment(databaseHelper));
         fragmentTransaction.commit();
-        databaseHelper = new DatabaseHelper(this);
     }
 }
