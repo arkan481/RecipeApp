@@ -45,13 +45,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(IngridientsID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 "RecipeID INTEGER NOT NULL," +
                 "IngridientsName VARCHAR," +
-                "FOREIGN KEY (RecipeID) REFERENCES "+db_Table_Recipe+("RecipeID") +
+                "FOREIGN KEY (RecipeID) REFERENCES "+db_Table_Recipe+"(RecipeID)" +
+                "ON DELETE CASCADE" +
                 ")");
         db.execSQL("CREATE TABLE "+db_Table_Preparations+"" +
                 "(PreparationsID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 "RecipeID INTEGER NOT NULL," +
                 "PreparationsName VARCHAR," +
-                "FOREIGN KEY (RecipeID) REFERENCES "+db_Table_Recipe+("RecipeID") +
+                "FOREIGN KEY (RecipeID) REFERENCES "+db_Table_Recipe+"(RecipeID)" +
+                "ON DELETE CASCADE" +
                 ")");
         //TODO : ADD CONSTRAINT TO DELETE ON UPDATE FOR THE FOREIGN KEY
     }
@@ -102,4 +104,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         id=res.getString(0);
         return id;
     }
+    public void updateRecipeAll(String RecipeName,String RecipeImage,String RecipeLastEdited,String RecipeServingSize,String RecipeID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE "+db_Table_Recipe+" SET RecipeName = (?), RecipeImage = (?), RecipeLastEdited = (?), RecipeServingSize=(?) WHERE RecipeID = (?)",new String[]{RecipeName,RecipeImage,RecipeLastEdited,RecipeServingSize,RecipeID});
+    }
+    public void deleteIngridientsAll(String RecipeID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM Ingridients_tb WHERE RecipeID=(?)",new String[]{RecipeID});
+    }
+    public void deletePreparationsAll(String RecipeID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM Preparations_tb WHERE RecipeID=(?)",new String[]{RecipeID});
+    }
+
 }

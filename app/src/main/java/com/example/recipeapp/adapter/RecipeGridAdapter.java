@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -69,6 +71,7 @@ public class RecipeGridAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Bundle myBundle = new Bundle();
+                myBundle.putInt("RecipeID",recipeModel.getId());
                 myBundle.putString("foodtitle",recipeModel.getTitle());
                 myBundle.putString("lastedited",recipeModel.getLastedited());
                 myBundle.putSerializable("ingridients",recipeModel.getIngridients());
@@ -97,4 +100,7 @@ public class RecipeGridAdapter extends BaseAdapter {
         lasteditedrecipe.setText(recipeModel.getLastedited());
         return itemview;
     }
+
+
+
 }

@@ -37,7 +37,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.zip.Inflater;
@@ -67,7 +69,8 @@ public class RecipeDetailFragment extends Fragment {
     private static final int PERMISSION_PICK_CODE = 1001;
     String RecipeImage;
     DatabaseHelper databaseHelper;
-
+    int dbid;
+    SimpleDateFormat simpleDateFormat =new SimpleDateFormat("dd/MM/yyyy");
 
     public RecipeDetailFragment(DatabaseHelper databaseHelper) {
         // Required empty public constructor
@@ -135,6 +138,7 @@ public class RecipeDetailFragment extends Fragment {
         if (isupdating==true) {
             System.out.println("updating...");
             foodtitleet.setText(extras.getString("foodtitle"));
+            dbid=extras.getInt("RecipeID");
             RecipeImage=extras.getString("recipeimage");
             RecipeImageView.setImageURI(Uri.parse(RecipeImage));
             ingridients = (ArrayList<String>) extras.getSerializable("ingridients");
@@ -154,6 +158,12 @@ public class RecipeDetailFragment extends Fragment {
                     Toast.makeText(getContext(),"Please Specify the food title and the food image",Toast.LENGTH_LONG).show();
                 }else {
                     if (isupdating==true) {
+                        databaseHelper.updateRecipeAll(foodtitleet.getText().toString(),RecipeImage, simpleDateFormat.format(Calendar.getInstance().getTime()),"4",String.valueOf(dbid));
+                        databaseHelper.deletePreparationsAll(String.valueOf(dbid));
+                        databaseHelper.deleteIngridientsAll(String.valueOf(dbid));
+                        updateingridienttodb();
+                        updatepreparationtodb();
+
 //                        ingridients = new ArrayList<String>();
 //                        preparations = new ArrayList<String>();
 ////                    updatingmodel.setimage(convertimagetobytearray(RecipeImageView.getDrawable()));
@@ -162,9 +172,8 @@ public class RecipeDetailFragment extends Fragment {
 //                        updatingmodel.setIngridients(getingridientlist());
 //                        updatingmodel.setSteps(getPreparationslist());
 //                        updatingmodel.setLastedited("Just now");
-                        //TODO : ADD update from database helper
                     }else {
-                        databaseHelper.insertRecipe(foodtitleet.getText().toString(),"02/20/2020",RecipeImage,"4");
+                        databaseHelper.insertRecipe(foodtitleet.getText().toString(),simpleDateFormat.format(Calendar.getInstance().getTime()),RecipeImage,"4");
                         insertingridienttodb();
                         insertpreparationtodb();
                     }
@@ -274,18 +283,28 @@ public class RecipeDetailFragment extends Fragment {
             databaseHelper.insertingridients(databaseHelper.fetchlatestRecipeID(),EditTextIngridients.get(i).getText().toString());
         }
     }
+    public void updateingridienttodb() {
+        for (int i=0;i<EditTextIngridients.size();i++) {
+            databaseHelper.insertingridients(String.valueOf(dbid),EditTextIngridients.get(i).getText().toString());
+        }
+    }
+    public void updatepreparationtodb() {
+        for (int i=0;i<EditTextPreparations.size();i++) {
+            databaseHelper.insertPreparations(String.valueOf(dbid),EditTextPreparations.get(i).getText().toString());
+        }
+    }
     public void insertpreparationtodb() {
         for (int i =0;i<EditTextPreparations.size();i++) {
             System.out.println("the total i is "+i);
             databaseHelper.insertPreparations(databaseHelper.fetchlatestRecipeID(),EditTextPreparations.get(i).getText().toString());
         }
     }
-    ArrayList<String> getPreparationslist() {
-        for (int i =0;i<EditTextPreparations.size();i++) {
-            preparations.add(EditTextPreparations.get(i).getText().toString());
-        }
-        return preparations;
-    }
+//    ArrayList<String> getPreparationslist() {
+//        for (int i =0;i<EditTextPreparations.size();i++) {
+//            preparations.add(EditTextPreparations.get(i).getText().toString());
+//        }
+//        return preparations;
+//    }
 
 
 }
