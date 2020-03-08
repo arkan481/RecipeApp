@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,7 @@ public class RecipeListFragment extends Fragment {
     Spinner SortSpinner;
     RelativeLayout searchlayout;
     GridView recipegrid;
+    TextView searchRecipeTV;
     ArrayList<RecipeModel> recipeModels;
     RecipeGridAdapter gridAdapter;
     FloatingActionButton fabplus;
@@ -62,6 +65,7 @@ public class RecipeListFragment extends Fragment {
         }else {
 
         }
+        searchRecipeTV=v.findViewById(R.id.searchrecipeetid);
         gridAdapter = new RecipeGridAdapter(getActivity(),populaterecipegrid(),databaseHelper,this);
         recipegrid.setAdapter(gridAdapter);
         SortSpinner = v.findViewById(R.id.sortspinnerid);
@@ -88,9 +92,24 @@ public class RecipeListFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+        searchRecipeTV.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                gridAdapter.getFilter().filter(s);
+            }
+        });
         refreshgridview();
         return v;
-
     }
 
     public void refreshgridview() {

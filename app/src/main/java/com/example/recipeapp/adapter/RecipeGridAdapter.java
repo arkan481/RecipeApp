@@ -29,16 +29,19 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
-public class RecipeGridAdapter extends BaseAdapter {
+public class RecipeGridAdapter extends BaseAdapter implements Filterable {
     ArrayList<RecipeModel> recipeModels;
+    ArrayList<RecipeModel> filteredRecipeModels;
     Context mycontext;
     DatabaseHelper databaseHelper;
     RecipeListFragment recipeListFragment;
+    CustomFilter customFilter;
     public RecipeGridAdapter(Context context, ArrayList<RecipeModel> recipeModels, DatabaseHelper databaseHelper, RecipeListFragment recipeListFragment) {
         this.databaseHelper=databaseHelper;
         mycontext=context;
         this.recipeModels=recipeModels;
         this.recipeListFragment=recipeListFragment;
+        this.filteredRecipeModels=recipeModels;
     }
 
     public int getCount() {
@@ -101,6 +104,41 @@ public class RecipeGridAdapter extends BaseAdapter {
         return itemview;
     }
 
+    @Override
+    public Filter getFilter() {
+        if (customFilter==null) {
+            customFilter=new CustomFilter();
+        }
+        return customFilter;
+    }
+    class CustomFilter extends Filter {
 
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint!=null&&constraint.length()>0) {
+                constraint=constraint.toString().toUpperCase();
+                ArrayList<RecipeModel> recipeModels = new ArrayList<RecipeModel>();
+                for (int i=0;i<filteredRecipeModels.size();i++) {
+                    if (filteredRecipeModels.get(i).getTitle().toUpperCase().contains(constraint)) {
+                        RecipeModel recipeModel = new RecipeModel(filteredRecipeModels.get(i).getId(),filteredRecipeModels.get(i).getTitle(),filteredRecipeModels.get(i).getLastedited(),filteredRecipeModels.get(i).getimage(),filteredRecipeModels.get(i).getIngridients(),filteredRecipeModels.get(i).getSteps());
+                        recipeModels.add(recipeModel);
+                    }
+                }
+                filterResults.count=recipeModels.size();
+                filterResults.values=recipeModels;
+            }else {
+                filterResults.count=filteredRecipeModels.size();
+                filterResults.values=filteredRecipeModels;
+            }
 
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            recipeModels=(ArrayList<RecipeModel>) results.values;
+            notifyDataSetChanged();
+        }
+    }
 }
